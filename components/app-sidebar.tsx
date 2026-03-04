@@ -245,9 +245,11 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Aide">
-              <HelpCircle />
-              <span>Aide</span>
+            <SidebarMenuButton tooltip="Aide" asChild>
+              <Link href="/help">
+                <HelpCircle />
+                <span>Aide</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
