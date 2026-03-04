@@ -51,9 +51,13 @@ export default function FicheValeurPage({
     ? generateCandlestickData(tickerUp, stock.previousClose, period)
     : []
 
-  const orderBook = stock
-    ? generateOrderBook(stock.price)
-    : { bids: [], asks: [] }
+  const [orderBook, setOrderBook] = useState<{ bids: any[], asks: any[] }>({ bids: [], asks: [] })
+
+  useEffect(() => {
+    if (stock) {
+      setOrderBook(generateOrderBook(stock.price))
+    }
+  }, [stock?.price]) // Regenerate when price changes (or initially)
 
   useEffect(() => {
     if (!stock) return

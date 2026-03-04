@@ -1,23 +1,24 @@
 "use client"
 
-import { usePathname } from "next/navigation"
-import Link from "next/link"
-import { Search, Bell, Sun, Moon, CircleHelp } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { NotificationsPopover } from "@/components/notifications-popover"
+import { useTheme } from "@/components/theme-provider"
+import { useTour } from "@/components/tour-provider"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
 import {
   Breadcrumb,
-  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useTheme } from "@/components/theme-provider"
-import { useTour } from "@/components/tour-provider"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { CircleHelp, Moon, Search, Sun } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const pathLabels: Record<string, string> = {
   "": "Dashboard",
@@ -111,11 +112,7 @@ export function AppHeader() {
           <Button variant="ghost" size="icon" className="size-8" onClick={toggleTheme}>
             {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </Button>
-          <Button variant="ghost" size="icon" className="size-8" asChild>
-            <Link href="/notifications">
-              <Bell className="size-4" />
-            </Link>
-          </Button>
+          <NotificationsPopover />
           <Link href="/profil">
             <Avatar className="size-7 transition-opacity hover:opacity-80">
               <AvatarFallback className="text-xs">SZ</AvatarFallback>
