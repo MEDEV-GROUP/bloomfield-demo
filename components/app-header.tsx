@@ -36,6 +36,9 @@ const pathLabels: Record<string, string> = {
   alertes: "Alertes",
   rapports: "Rapports",
   parametres: "Paramètres",
+  notifications: "Notifications",
+  profil: "Mon profil",
+  help: "Aide",
 }
 
 export function AppHeader() {
@@ -108,12 +111,16 @@ export function AppHeader() {
           <Button variant="ghost" size="icon" className="size-8" onClick={toggleTheme}>
             {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </Button>
-          <Button variant="ghost" size="icon" className="size-8">
-            <Bell className="size-4" />
+          <Button variant="ghost" size="icon" className="size-8" asChild>
+            <Link href="/notifications">
+              <Bell className="size-4" />
+            </Link>
           </Button>
-          <Avatar className="size-7">
-            <AvatarFallback className="text-xs">SZ</AvatarFallback>
-          </Avatar>
+          <Link href="/profil">
+            <Avatar className="size-7 transition-opacity hover:opacity-80">
+              <AvatarFallback className="text-xs">SZ</AvatarFallback>
+            </Avatar>
+          </Link>
         </div>
       </div>
     </header>
