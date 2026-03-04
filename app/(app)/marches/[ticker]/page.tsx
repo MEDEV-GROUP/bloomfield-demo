@@ -22,11 +22,11 @@ import {
   stockNews,
   tigranScores,
 } from "@/data/stock-details"
-import { stocks as initialStocks, type Stock } from "@/data/stocks"
+import { stocks as initialStocks, type OrderBook, type Stock } from "@/data/stocks"
 import { cn } from "@/lib/utils"
 import { ArrowDownRight, ArrowLeft, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
-import { use, useEffect, useState } from "react"
+import { use, useEffect, useMemo, useState } from "react"
 
 const periods = ["1J", "1S", "1M", "3M", "6M", "1A", "5A"] as const
 
@@ -51,13 +51,10 @@ export default function FicheValeurPage({
     ? generateCandlestickData(tickerUp, stock.previousClose, period)
     : []
 
-  const [orderBook, setOrderBook] = useState<{ bids: any[], asks: any[] }>({ bids: [], asks: [] })
-
-  useEffect(() => {
-    if (stock) {
-      setOrderBook(generateOrderBook(stock.price))
-    }
-  }, [stock?.price]) // Regenerate when price changes (or initially)
+  const orderBook = useMemo<OrderBook>(
+    () => (stock ? generateOrderBook(stock.price) : { bids: [], asks: [] }),
+    [stock?.price] // eslint-disable-line react-hooks/exhaustive-deps
+  )
 
   useEffect(() => {
     if (!stock) return
@@ -220,7 +217,7 @@ export default function FicheValeurPage({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {orderBook.bids.map((entry, i) => (
+                    {orderBook.bids.map((entry: { price: number; quantity: number }, i: number) => (
                       <TableRow key={i} className="border-0">
                         <TableCell className="px-0 py-0 font-mono text-[11px] text-green-500">
                           {entry.price.toLocaleString("fr-FR")}
@@ -249,7 +246,7 @@ export default function FicheValeurPage({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {orderBook.asks.map((entry, i) => (
+                    {orderBook.asks.map((entry: { price: number; quantity: number }, i: number) => (
                       <TableRow key={i} className="border-0">
                         <TableCell className="px-0 py-0 font-mono text-[11px] text-red-500">
                           {entry.price.toLocaleString("fr-FR")}

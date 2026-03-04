@@ -6,6 +6,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react"
@@ -36,6 +37,9 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
   const [run, setRun] = useState(false)
   const [stepIndex, setStepIndex] = useState(0)
   const navigatingRef = useRef(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   const startTour = useCallback(() => {
     const firstPage = tourSteps[0]?.page ?? "/"
@@ -104,63 +108,65 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
   return (
     <TourContext.Provider value={{ startTour, isRunning: run }}>
       {children}
-      <Joyride
-        steps={tourSteps}
-        run={run}
-        stepIndex={stepIndex}
-        continuous
-        showProgress
-        showSkipButton
-        callback={handleCallback}
-        disableOverlayClose
-        spotlightClicks={false}
-        locale={{
-          back: "Précédent",
-          close: "Fermer",
-          last: "Terminer",
-          next: "Suivant",
-          skip: "Passer",
-        }}
-        styles={{
-          options: {
-            zIndex: 10000,
-            arrowColor: "var(--popover)",
-            backgroundColor: "var(--popover)",
-            textColor: "var(--popover-foreground)",
-            primaryColor: "var(--primary)",
-            overlayColor: "rgba(0, 0, 0, 0.6)",
-          },
-          tooltip: {
-            borderRadius: "8px",
-            padding: "16px",
-            border: "1px solid var(--border)",
-          },
-          tooltipTitle: {
-            fontSize: "14px",
-            fontWeight: 600,
-          },
-          tooltipContent: {
-            fontSize: "13px",
-            lineHeight: 1.5,
-          },
-          buttonNext: {
-            borderRadius: "6px",
-            fontSize: "12px",
-            padding: "6px 16px",
-          },
-          buttonBack: {
-            color: "var(--muted-foreground)",
-            fontSize: "12px",
-          },
-          buttonSkip: {
-            color: "var(--muted-foreground)",
-            fontSize: "12px",
-          },
-          spotlight: {
-            borderRadius: "8px",
-          },
-        }}
-      />
+      {mounted && (
+        <Joyride
+          steps={tourSteps}
+          run={run}
+          stepIndex={stepIndex}
+          continuous
+          showProgress
+          showSkipButton
+          callback={handleCallback}
+          disableOverlayClose
+          spotlightClicks={false}
+          locale={{
+            back: "Précédent",
+            close: "Fermer",
+            last: "Terminer",
+            next: "Suivant",
+            skip: "Passer",
+          }}
+          styles={{
+            options: {
+              zIndex: 10000,
+              arrowColor: "var(--popover)",
+              backgroundColor: "var(--popover)",
+              textColor: "var(--popover-foreground)",
+              primaryColor: "var(--primary)",
+              overlayColor: "rgba(0, 0, 0, 0.6)",
+            },
+            tooltip: {
+              borderRadius: "8px",
+              padding: "16px",
+              border: "1px solid var(--border)",
+            },
+            tooltipTitle: {
+              fontSize: "14px",
+              fontWeight: 600,
+            },
+            tooltipContent: {
+              fontSize: "13px",
+              lineHeight: 1.5,
+            },
+            buttonNext: {
+              borderRadius: "6px",
+              fontSize: "12px",
+              padding: "6px 16px",
+            },
+            buttonBack: {
+              color: "var(--muted-foreground)",
+              fontSize: "12px",
+            },
+            buttonSkip: {
+              color: "var(--muted-foreground)",
+              fontSize: "12px",
+            },
+            spotlight: {
+              borderRadius: "8px",
+            },
+          }}
+        />
+      )}
     </TourContext.Provider>
   )
 }

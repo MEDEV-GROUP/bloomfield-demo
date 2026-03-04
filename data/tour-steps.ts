@@ -41,7 +41,7 @@ export const tourSteps: TourStep[] = [
     target: '[data-tour="widget-movers"]',
     title: "Top Movers",
     content:
-      "Les plus fortes hausses et baisses du jour sur la BRVM, mises à jour en temps réel.",
+      "Les plus fortes hausses et baisses du jour sur la BRVM, mises à jour en temps réel. Cliquez sur un titre pour accéder à sa fiche détaillée.",
     page: "/",
     disableBeacon: true,
   },

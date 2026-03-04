@@ -1,17 +1,17 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSlot,
   InputOTPSeparator,
+  InputOTPSlot,
 } from "@/components/ui/input-otp"
-import { Shield, Mail, KeyRound, ArrowLeft } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import { ArrowLeft, KeyRound, Mail, Shield } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 type Step = "email" | "otp"
 
@@ -31,6 +31,8 @@ export default function LoginPage() {
   const handleOtpComplete = (value: string) => {
     setOtp(value)
     if (value.length === 5) {
+      // Simulate successful login by setting a cookie
+      document.cookie = "bloomfield_demo_auth=true; path=/; max-age=86400"
       router.push("/")
     }
   }

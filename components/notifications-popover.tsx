@@ -131,27 +131,11 @@ function NotifIcon({ category, trend }: { category: NotifCategory; trend?: "up" 
   return <Settings2 className="size-4 text-amber-500" />
 }
 
-// ─── Constantes de style ─────────────────────────────────────────
-
-const CATEGORY_LABELS: Record<NotifCategory, string> = {
-  marchés: "Marchés",
-  portefeuille: "Portefeuille",
-  actualités: "Actualités",
-  système: "Système",
-}
-
 const ICON_BG: Record<NotifCategory, string> = {
   marchés: "bg-primary/10",
   portefeuille: "bg-blue-500/10",
   actualités: "bg-muted",
   système: "bg-amber-500/10",
-}
-
-const BADGE_CLASSES: Record<NotifCategory, string> = {
-  marchés: "bg-primary/10 text-primary hover:bg-primary/10",
-  portefeuille: "bg-blue-500/10 text-blue-400 hover:bg-blue-500/10",
-  actualités: "bg-muted text-muted-foreground hover:bg-muted",
-  système: "bg-amber-500/10 text-amber-500 hover:bg-amber-500/10",
 }
 
 const FILTERS: { value: FilterValue; label: string }[] = [

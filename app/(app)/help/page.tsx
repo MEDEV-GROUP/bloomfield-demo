@@ -1,53 +1,28 @@
 "use client"
 
-import { useState } from "react"
-import {
-  HelpCircle,
-  LayoutDashboard,
-  BarChart2,
-  Wallet,
-  Search,
-  Globe,
-  Newspaper,
-  ChevronDown,
-  Keyboard,
-  Send,
-  CheckCircle2,
-  Paperclip,
-  X,
-} from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  BarChart2,
+  ChevronDown,
+  Globe,
+  HelpCircle,
+  LayoutDashboard,
+  Newspaper,
+  Search,
+  Wallet,
+} from "lucide-react"
+
 import { cn } from "@/lib/utils"
 import type { LucideIcon } from "lucide-react"
 
@@ -66,17 +41,7 @@ interface FaqItem {
   defaultOpen?: boolean
 }
 
-interface Shortcut {
-  keys: string[]
-  action: string
-}
 
-interface ContactForm {
-  name: string
-  email: string
-  subject: string
-  message: string
-}
 
 // --- Données statiques ---
 
@@ -189,47 +154,10 @@ const faqItems: FaqItem[] = [
 ]
 
 
-const subjectOptions = [
-  { value: "bug", label: "Signaler un bug" },
-  { value: "feature", label: "Demande de fonctionnalité" },
-  { value: "data", label: "Problème de données" },
-  { value: "access", label: "Accès & permissions" },
-  { value: "other", label: "Autre" },
-]
 
 // --- Page ---
 
 export default function HelpPage() {
-  // État du formulaire de contact
-  const [form, setForm] = useState<ContactForm>({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  })
-  // Pièces jointes optionnelles (2 fichiers max)
-  const [attachment1, setAttachment1] = useState<File | null>(null)
-  const [attachment2, setAttachment2] = useState<File | null>(null)
-
-  // Affiche le message de succès après envoi simulé
-  const [submitted, setSubmitted] = useState(false)
-
-  /** Vérifie que tous les champs sont remplis avant d'autoriser l'envoi */
-  const isFormValid =
-    form.name.trim() !== "" &&
-    form.email.trim() !== "" &&
-    form.subject !== "" &&
-    form.message.trim() !== ""
-
-  /** Simule l'envoi du formulaire et affiche la confirmation */
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!isFormValid) return
-    setSubmitted(true)
-    setForm({ name: "", email: "", subject: "", message: "" })
-    setAttachment1(null)
-    setAttachment2(null)
-  }
 
   return (
     <div className="flex flex-1 flex-col gap-8 overflow-auto p-4">
@@ -312,224 +240,6 @@ export default function HelpPage() {
             ))}
           </CardContent>
         </Card>
-      </section>
-
-      {/* ─── Section 4 : Formulaire de contact ─── */}
-      <section className="flex flex-col gap-4">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-          Nous contacter
-        </h2>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <Send className="size-4 text-muted-foreground" />
-              Envoyer un message à l&apos;équipe support
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {/* Message de succès après envoi */}
-            {submitted ? (
-              <div className="flex flex-col items-center gap-3 py-8 text-center">
-                <CheckCircle2 className="size-10 text-green-500" />
-                <p className="font-medium">Message envoyé !</p>
-                <p className="text-sm text-muted-foreground">
-                  L&apos;équipe support vous répondra sous 24h à l&apos;adresse
-                  indiquée.
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSubmitted(false)}
-                >
-                  Envoyer un autre message
-                </Button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                {/* Ligne nom / email */}
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="contact-name">Nom complet</Label>
-                    <Input
-                      id="contact-name"
-                      placeholder="Stanislas Zézé"
-                      value={form.name}
-                      onChange={(e) =>
-                        setForm((prev) => ({ ...prev, name: e.target.value }))
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="contact-email">Email</Label>
-                    <Input
-                      id="contact-email"
-                      type="email"
-                      placeholder="s.zeze@bloomfield-investment.com"
-                      value={form.email}
-                      onChange={(e) =>
-                        setForm((prev) => ({ ...prev, email: e.target.value }))
-                      }
-                    />
-                  </div>
-                </div>
-
-                {/* Sujet */}
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="contact-subject">Sujet</Label>
-                  <Select
-                    value={form.subject}
-                    onValueChange={(val) =>
-                      setForm((prev) => ({ ...prev, subject: val }))
-                    }
-                  >
-                    <SelectTrigger id="contact-subject">
-                      <SelectValue placeholder="Choisir un sujet…" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {subjectOptions.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Message */}
-                <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="contact-message">Message</Label>
-                  <Textarea
-                    id="contact-message"
-                    placeholder="Décrivez votre problème ou votre demande…"
-                    rows={5}
-                    value={form.message}
-                    onChange={(e) =>
-                      setForm((prev) => ({
-                        ...prev,
-                        message: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-
-                {/* Pièces jointes optionnelles */}
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {/* Pièce jointe 1 */}
-                  <div className="flex flex-col gap-1.5">
-                    <Label className="flex items-center gap-1.5">
-                      <Paperclip className="size-3.5 text-muted-foreground" />
-                      Pièce jointe 1
-                      <span className="text-xs text-muted-foreground">(optionnel)</span>
-                    </Label>
-                    <label
-                      htmlFor="attachment-1"
-                      className={cn(
-                        "flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border px-3 py-2.5",
-                        "text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:bg-accent/40"
-                      )}
-                    >
-                      {attachment1 ? (
-                        <>
-                          <span className="flex-1 truncate text-foreground">
-                            {attachment1.name}
-                          </span>
-                          {/* Bouton pour retirer le fichier sélectionné */}
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              setAttachment1(null)
-                            }}
-                            className="shrink-0 rounded p-0.5 hover:text-foreground"
-                          >
-                            <X className="size-3.5" />
-                          </button>
-                        </>
-                      ) : (
-                        <span>Choisir un fichier…</span>
-                      )}
-                      <input
-                        id="attachment-1"
-                        type="file"
-                        accept="image/*,.pdf,.xlsx,.docx"
-                        className="sr-only"
-                        onChange={(e) =>
-                          setAttachment1(e.target.files?.[0] ?? null)
-                        }
-                      />
-                    </label>
-                  </div>
-
-                  {/* Pièce jointe 2 */}
-                  <div className="flex flex-col gap-1.5">
-                    <Label className="flex items-center gap-1.5">
-                      <Paperclip className="size-3.5 text-muted-foreground" />
-                      Pièce jointe 2
-                      <span className="text-xs text-muted-foreground">(optionnel)</span>
-                    </Label>
-                    <label
-                      htmlFor="attachment-2"
-                      className={cn(
-                        "flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-border px-3 py-2.5",
-                        "text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:bg-accent/40"
-                      )}
-                    >
-                      {attachment2 ? (
-                        <>
-                          <span className="flex-1 truncate text-foreground">
-                            {attachment2.name}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              setAttachment2(null)
-                            }}
-                            className="shrink-0 rounded p-0.5 hover:text-foreground"
-                          >
-                            <X className="size-3.5" />
-                          </button>
-                        </>
-                      ) : (
-                        <span>Choisir un fichier…</span>
-                      )}
-                      <input
-                        id="attachment-2"
-                        type="file"
-                        accept="image/*,.pdf,.xlsx,.docx"
-                        className="sr-only"
-                        onChange={(e) =>
-                          setAttachment2(e.target.files?.[0] ?? null)
-                        }
-                      />
-                    </label>
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={!isFormValid}
-                  className="self-start gap-2"
-                >
-                  <Send className="size-3.5" />
-                  Envoyer
-                </Button>
-              </form>
-            )}
-          </CardContent>
-        </Card>
-
-        <Separator />
-
-        <p className="text-xs text-muted-foreground">
-          Bloomfield Terminal — version démo destinée aux présentations client.
-          Les données de marché sont simulées à partir de valeurs BRVM réelles.
-          Contact :{" "}
-          <span className="text-foreground">
-            support@bloomfield-investment.com
-          </span>
-        </p>
       </section>
     </div>
   )

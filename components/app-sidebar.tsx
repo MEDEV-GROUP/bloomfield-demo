@@ -1,54 +1,55 @@
 "use client"
 
-import { usePathname } from "next/navigation"
-import Link from "next/link"
-import {
-  LayoutDashboard,
-  TrendingUp,
-  Briefcase,
-  BarChart3,
-  Globe,
-  Newspaper,
-  Settings,
-  Bell,
-  ChevronRight,
-  LineChart,
-  CandlestickChart,
-  Coins,
-  PieChart,
-  Target,
-  Layers,
-  Search,
-  GitCompareArrows,
-  Map,
-  Activity,
-  FileText,
-  HelpCircle,
-  LogOut,
-} from "lucide-react"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuBadge,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
-  SidebarFooter,
-  SidebarRail,
-  SidebarSeparator,
-} from "@/components/ui/sidebar"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarRail,
+  SidebarSeparator,
+} from "@/components/ui/sidebar"
+import {
+  Activity,
+  BarChart3,
+  Bell,
+  Briefcase,
+  CandlestickChart,
+  ChevronRight,
+  Coins,
+  FileText,
+  GitCompareArrows,
+  Globe,
+  HelpCircle,
+  Info,
+  Layers,
+  LayoutDashboard,
+  LineChart,
+  LogOut,
+  Map,
+  Newspaper,
+  PieChart,
+  Search,
+  Settings,
+  Target,
+  TrendingUp,
+} from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 interface NavItem {
   title: string
@@ -244,6 +245,14 @@ export function AppSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton tooltip="À propos" asChild>
+              <a href="https://www.medev-group.com/fr" target="_blank" rel="noopener noreferrer">
+                <Info className="size-4" />
+                <span>À propos</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton tooltip="Aide" asChild>
               <Link href="/help">
