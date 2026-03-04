@@ -1,0 +1,110 @@
+"use client"
+
+import { usePathname } from "next/navigation"
+import Link from "next/link"
+import { Search, Bell, Sun, Moon } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@/components/ui/separator"
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import { useTheme } from "@/components/theme-provider"
+
+const pathLabels: Record<string, string> = {
+  "": "Dashboard",
+  marches: "Marchés",
+  indices: "Indices",
+  devises: "Devises",
+  portefeuille: "Portefeuille",
+  performance: "Performance",
+  allocation: "Allocation",
+  analyse: "Analyse",
+  screener: "Screener",
+  comparateur: "Comparateur",
+  macro: "Macro",
+  carte: "Carte UEMOA",
+  news: "Actualités",
+  alertes: "Alertes",
+  rapports: "Rapports",
+  parametres: "Paramètres",
+}
+
+export function AppHeader() {
+  const { theme, toggleTheme } = useTheme()
+  const pathname = usePathname()
+
+  const segments = pathname.split("/").filter(Boolean)
+
+  const crumbs = segments.map((segment, index) => {
+    const href = "/" + segments.slice(0, index + 1).join("/")
+    const label = pathLabels[segment] ?? segment.toUpperCase()
+    return { label, href }
+  })
+
+  return (
+    <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
+      <SidebarTrigger />
+      <Separator orientation="vertical" className="h-4" />
+
+      <Breadcrumb>
+        <BreadcrumbList className="text-xs">
+          <BreadcrumbItem>
+            {crumbs.length === 0 ? (
+              <BreadcrumbPage>Dashboard</BreadcrumbPage>
+            ) : (
+              <BreadcrumbLink asChild>
+                <Link href="/">Dashboard</Link>
+              </BreadcrumbLink>
+            )}
+          </BreadcrumbItem>
+          {crumbs.map((crumb, i) => {
+            const isLast = i === crumbs.length - 1
+            return (
+              <span key={crumb.href} className="contents">
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  {isLast ? (
+                    <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                  ) : (
+                    <BreadcrumbLink asChild>
+                      <Link href={crumb.href}>{crumb.label}</Link>
+                    </BreadcrumbLink>
+                  )}
+                </BreadcrumbItem>
+              </span>
+            )
+          })}
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="relative w-72">
+          <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="Rechercher un titre, un marché..."
+            className="h-8 pl-8 text-xs"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" className="size-8" onClick={toggleTheme}>
+            {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+          </Button>
+          <Button variant="ghost" size="icon" className="size-8">
+            <Bell className="size-4" />
+          </Button>
+          <Avatar className="size-7">
+            <AvatarFallback className="text-xs">SZ</AvatarFallback>
+          </Avatar>
+        </div>
+      </div>
+    </header>
+  )
+}
