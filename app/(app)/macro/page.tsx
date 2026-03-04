@@ -1,12 +1,16 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import { uemoaCountries, bloomfieldForecasts } from "@/data/macro-countries"
-import { UEMOAMap } from "@/components/uemoa-map"
-import { MacroIndicatorCard } from "@/components/macro-indicator-card"
 import { CountryComparisonTable } from "@/components/country-comparison-table"
-import { WidgetContainer } from "@/components/widget-container"
+import { MacroIndicatorCard } from "@/components/macro-indicator-card"
+import { UEMOAMap } from "@/components/uemoa-map"
 import { Badge } from "@/components/ui/badge"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -15,15 +19,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { WidgetContainer } from "@/components/widget-container"
+import { bloomfieldForecasts, uemoaCountries } from "@/data/macro-countries"
 import { cn } from "@/lib/utils"
-import { Globe, ArrowUpRight, ArrowDownRight, Sparkles } from "lucide-react"
+import { ArrowDownRight, ArrowUpRight, Globe, Sparkles } from "lucide-react"
+import { useMemo, useState } from "react"
 
 export default function MacroPage() {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
@@ -168,7 +168,7 @@ export default function MacroPage() {
       {/* Content */}
       <div className="flex-1 space-y-3 overflow-auto p-4">
         {/* Indicators band — full width */}
-        <div className="grid grid-cols-6 gap-3">
+        <div className="grid grid-cols-6 gap-3" data-tour="macro-indicators">
           {indicators.map((ind) => (
             <MacroIndicatorCard
               key={ind.label}
@@ -185,7 +185,7 @@ export default function MacroPage() {
         {/* Map + Bloomfield Forecast */}
         <div className="grid grid-cols-12 gap-3">
           {/* Map */}
-          <WidgetContainer title="Carte UEMOA" className="col-span-5">
+          <WidgetContainer title="Carte UEMOA" className="col-span-5" data-tour="macro-map">
             <UEMOAMap
               countries={uemoaCountries}
               selectedCountry={selectedCountry}
@@ -197,6 +197,7 @@ export default function MacroPage() {
           <WidgetContainer
             title="Prévisions Bloomfield Forecast"
             className="col-span-7"
+            data-tour="macro-forecasts"
             action={
               <Badge variant="outline" className="gap-1 text-[10px]">
                 <Sparkles className="size-2.5" />
@@ -269,7 +270,7 @@ export default function MacroPage() {
         </div>
 
         {/* Country Comparison */}
-        <WidgetContainer title="Comparaison multi-pays">
+        <WidgetContainer title="Comparaison multi-pays" data-tour="macro-comparison">
           <CountryComparisonTable
             countries={uemoaCountries}
             highlightCode={selectedCountry}

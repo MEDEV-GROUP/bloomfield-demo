@@ -1,21 +1,11 @@
 "use client"
 
-import { useState, useEffect, use } from "react"
-import Link from "next/link"
-import { stocks as initialStocks, type Stock } from "@/data/stocks"
-import { news } from "@/data/news"
-import {
-  stockFundamentals,
-  tigranScores,
-  stockNews,
-  generateCandlestickData,
-  generateOrderBook,
-} from "@/data/stock-details"
 import { CandlestickChart } from "@/components/candlestick-chart"
-import { ScoreGauge } from "@/components/score-gauge"
 import { PriceCell } from "@/components/price-cell"
+import { ScoreGauge } from "@/components/score-gauge"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import {
   Table,
   TableBody,
@@ -24,9 +14,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Separator } from "@/components/ui/separator"
+import { news } from "@/data/news"
+import {
+  generateCandlestickData,
+  generateOrderBook,
+  stockFundamentals,
+  stockNews,
+  tigranScores,
+} from "@/data/stock-details"
+import { stocks as initialStocks, type Stock } from "@/data/stocks"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, ArrowUpRight, ArrowDownRight } from "lucide-react"
+import { ArrowDownRight, ArrowLeft, ArrowUpRight } from "lucide-react"
+import Link from "next/link"
+import { use, useEffect, useState } from "react"
 
 const periods = ["1J", "1S", "1M", "3M", "6M", "1A", "5A"] as const
 
@@ -97,7 +97,7 @@ export default function FicheValeurPage({
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/* En-tête compact */}
-      <div className="flex shrink-0 items-center gap-4 border-b border-border px-4 py-2">
+      <div className="flex shrink-0 items-center gap-4 border-b border-border px-4 py-2" data-tour="ticker-header">
         <Button asChild variant="ghost" size="icon" className="size-7">
           <Link href="/">
             <ArrowLeft className="size-4" />
@@ -187,7 +187,7 @@ export default function FicheValeurPage({
           </div>
 
           {/* Chart — remplit tout */}
-          <div className="flex-1">
+          <div className="flex-1" data-tour="ticker-chart">
             <CandlestickChart data={candlestickData} />
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function FicheValeurPage({
         {/* Panneau droit — fixe 280px */}
         <div className="flex w-[280px] shrink-0 flex-col overflow-auto">
           {/* Carnet d'ordres */}
-          <div className="border-b border-border px-3 py-2">
+          <div className="border-b border-border px-3 py-2" data-tour="ticker-orderbook">
             <div className="mb-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
               Carnet d&apos;ordres
             </div>
@@ -263,7 +263,7 @@ export default function FicheValeurPage({
 
           {/* Fondamentaux */}
           {fundamentals && (
-            <div className="border-b border-border px-3 py-2">
+            <div className="border-b border-border px-3 py-2" data-tour="ticker-fundamentals">
               <div className="mb-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                 Fondamentaux
               </div>
@@ -303,7 +303,7 @@ export default function FicheValeurPage({
 
           {/* Score Tigran */}
           {tigran && (
-            <div className="border-b border-border px-3 py-2">
+            <div className="border-b border-border px-3 py-2" data-tour="ticker-tigran">
               <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                 Bloomfield Tigran
               </div>

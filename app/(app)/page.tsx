@@ -110,7 +110,7 @@ export default function DashboardPage() {
       <TickerTape stocks={stockData} />
       <div className="grid flex-1 grid-cols-12 gap-3 overflow-auto p-4">
         {/* Indices BRVM */}
-        <WidgetContainer title="Indices BRVM" className="col-span-3">
+        <WidgetContainer title="Indices BRVM" className="col-span-3" data-tour="widget-indices">
           <div className="space-y-4">
             {indices.map((index) => (
               <div key={index.name}>
@@ -142,7 +142,7 @@ export default function DashboardPage() {
         </WidgetContainer>
 
         {/* Top Movers */}
-        <WidgetContainer title="Top Movers" className="col-span-5">
+        <WidgetContainer title="Top Movers" className="col-span-5" data-tour="widget-movers">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <div className="mb-2 flex items-center gap-1 text-xs font-medium text-green-500">
@@ -269,6 +269,7 @@ export default function DashboardPage() {
         <WidgetContainer
           title="SONATEL — Intraday"
           className="col-span-8"
+          data-tour="widget-chart"
         >
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
@@ -345,7 +346,7 @@ export default function DashboardPage() {
         </WidgetContainer>
 
         {/* Alertes */}
-        <WidgetContainer title="Alertes" className="col-span-6">
+        <WidgetContainer title="Alertes" className="col-span-6" data-tour="widget-alerts">
           <ScrollArea className="h-52">
             <div className="space-y-1">
               {[

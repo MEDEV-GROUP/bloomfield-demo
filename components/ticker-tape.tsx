@@ -9,7 +9,7 @@ interface TickerTapeProps {
 
 export function TickerTape({ stocks }: TickerTapeProps) {
   return (
-    <div className="relative overflow-hidden border-b border-border bg-card/50">
+    <div className="relative overflow-hidden border-b border-border bg-card/50" data-tour="ticker-tape">
       <div className="flex animate-ticker-scroll whitespace-nowrap">
         {[...stocks, ...stocks].map((stock, i) => (
           <div

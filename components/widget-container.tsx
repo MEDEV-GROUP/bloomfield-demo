@@ -1,10 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
-interface WidgetContainerProps {
+interface WidgetContainerProps extends React.ComponentProps<"div"> {
   title: string
   children: React.ReactNode
-  className?: string
   action?: React.ReactNode
 }
 
@@ -13,9 +12,10 @@ export function WidgetContainer({
   children,
   className,
   action,
+  ...rest
 }: WidgetContainerProps) {
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden", className)} {...rest}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 px-4 py-3">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {action}

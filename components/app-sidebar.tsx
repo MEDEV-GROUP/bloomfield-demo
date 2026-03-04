@@ -183,7 +183,7 @@ export function AppSidebar() {
   const pathname = usePathname()
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" data-tour="sidebar">
       <SidebarHeader className="px-3 py-4">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground text-sm font-bold">

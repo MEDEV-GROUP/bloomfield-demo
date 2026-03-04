@@ -83,15 +83,17 @@ export default function PortefeuillePage() {
       {/* Content */}
       <div className="flex-1 space-y-3 overflow-auto p-4">
         {/* KPIs */}
-        <PortfolioSummary
-          totalValue={summary.totalValue}
-          pnlDay={summary.pnlDay}
-          pnlDayPercent={summary.pnlDayPercent}
-          pnlTotal={summary.pnlTotal}
-          pnlTotalPercent={summary.pnlTotalPercent}
-          annualizedReturn={summary.annualizedReturn}
-          cashBalance={summary.cashBalance}
-        />
+        <div data-tour="portfolio-summary">
+          <PortfolioSummary
+            totalValue={summary.totalValue}
+            pnlDay={summary.pnlDay}
+            pnlDayPercent={summary.pnlDayPercent}
+            pnlTotal={summary.pnlTotal}
+            pnlTotalPercent={summary.pnlTotalPercent}
+            annualizedReturn={summary.annualizedReturn}
+            cashBalance={summary.cashBalance}
+          />
+        </div>
 
         {/* Allocation + Performance */}
         <div className="grid grid-cols-12 gap-3">
@@ -130,7 +132,7 @@ export default function PortefeuillePage() {
         </div>
 
         {/* Positions Table */}
-        <WidgetContainer title="Positions">
+        <WidgetContainer title="Positions" data-tour="portfolio-positions">
           <PositionsTable positions={positionData} />
         </WidgetContainer>
       </div>

@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Search, Bell, Sun, Moon } from "lucide-react"
+import { Search, Bell, Sun, Moon, CircleHelp } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -17,6 +17,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { useTheme } from "@/components/theme-provider"
+import { useTour } from "@/components/tour-provider"
 
 const pathLabels: Record<string, string> = {
   "": "Dashboard",
@@ -39,6 +40,7 @@ const pathLabels: Record<string, string> = {
 
 export function AppHeader() {
   const { theme, toggleTheme } = useTheme()
+  const { startTour } = useTour()
   const pathname = usePathname()
 
   const segments = pathname.split("/").filter(Boolean)
@@ -86,7 +88,7 @@ export function AppHeader() {
       </Breadcrumb>
 
       <div className="flex flex-1 items-center justify-end gap-2">
-        <div className="relative w-72">
+        <div className="relative w-72" data-tour="search">
           <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Rechercher un titre, un marché..."
@@ -94,6 +96,15 @@ export function AppHeader() {
           />
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-8"
+            onClick={startTour}
+            title="Visite guidée"
+          >
+            <CircleHelp className="size-4" />
+          </Button>
           <Button variant="ghost" size="icon" className="size-8" onClick={toggleTheme}>
             {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </Button>
