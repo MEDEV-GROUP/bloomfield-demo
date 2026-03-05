@@ -9,7 +9,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, KeyRound, Mail, Shield } from "lucide-react"
+import { ArrowLeft, Info, KeyRound, Mail, Shield } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -103,11 +103,7 @@ export default function LoginPage() {
             </div>
 
             <div className="flex justify-center">
-              <InputOTP
-                maxLength={5}
-                value={otp}
-                onChange={handleOtpComplete}
-              >
+              <InputOTP maxLength={5} value={otp} onChange={handleOtpComplete}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} className="size-12 text-lg" />
                   <InputOTPSlot index={1} className="size-12 text-lg" />
@@ -175,6 +171,22 @@ export default function LoginPage() {
             </button>
           </div>
         )}
+
+        <div className="mt-4 flex items-start justify-center gap-1.5 rounded-md border border-border/70 px-2 py-1.5 text-[11px] text-muted-foreground/80">
+          <Info className="mt-0.5 size-3 shrink-0 opacity-70" />
+          <p className="leading-relaxed">
+            <span className="font-medium">Mode démo :</span>{" "}
+            {step === "email" ? (
+              <>
+                cliquez sur <span className="font-semibold">Continuer</span> ou entrez n&apos;importe quel email.
+              </>
+            ) : (
+              <>
+                n&apos;importe quels <span className="font-semibold">5 chiffres</span> permettent de se connecter.
+              </>
+            )}
+          </p>
+        </div>
 
         {/* Footer */}
         <p className="mt-8 text-center text-[11px] text-muted-foreground">

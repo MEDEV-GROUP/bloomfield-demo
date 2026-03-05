@@ -1,0 +1,31 @@
+# Implémentation de la fonctionnalité "Fenêtres Flottantes"
+
+Cette tâche vise à implémenter un système de fenêtres modulables, redimensionnables et déplaçables pour les widgets de l'application, afin de donner un aspect "terminal" multi-fenêtres.
+
+## Phase 1 : Planification et Fondations
+- [ ] Valider le plan d'implémentation (avec l'utilisateur).
+- [ ] Installer les dépendances nécessaires (ex: `react-rnd` pour le drag & drop et redimensionnement, ou équivalent, et `zustand` pour la gestion d'état si nécessaire).
+
+## Phase 2 : Gestion de l'état (State Management)
+- [ ] Créer un store (ex: `useWindowStore`) pour gérer l'état des fenêtres (position, taille, z-index, visibilité, widgets ouverts).
+- [ ] Définir les types et interfaces pour les fenêtres (ID, titre, composant, x, y, width, height, isMinimized, isMaximized).
+
+## Phase 3 : Création du composant WindowManager
+- [ ] Créer un composant responsable du rendu de toutes les fenêtres actives à partir de l'état global.
+- [ ] Assurer la gestion du z-index (passer au premier plan au clic).
+
+## Phase 4 : Création du composant FloatingWindow (WidgetContainer)
+- [ ] Créer le composant `FloatingWindow` intégrant `react-rnd` (ou système DND interne).
+- [ ] Intégrer les styles de base (bordures, ombres, couleurs de fond via CSS vars du thème).
+- [ ] Implémenter le header ("Window Titlebar") avec les boutons de contrôle (Fermer, Maximiser/Réduire, Minimiser).
+- [ ] Assurer que le contenu du widget soit injectable dynamiquement (enfants).
+
+## Phase 5 : Intégration dans le Layout
+- [ ] Ajouter le `WindowManager` dans le layout principal ou les pages spécifiques.
+- [ ] Relier les boutons interactifs du reste de l'application (ex: sidebar ou dashboard) pour ouvrir des widgets spécifiques sous forme de fenêtres flottantes.
+- [ ] Remplacer les grilles statiques du dashboard par le système de fenêtres.
+
+## Phase 6 : Tests et Ajustements
+- [ ] Vérifier le build (`pnpm build`).
+- [ ] Vérifier TypeScript (`pnpm exec tsc --noEmit`) et le linting (`pnpm lint`).
+- [ ] Ajuster visuellement (z-index, animations, contraintes de redimensionnement) en suivant les règles de [MODULE-UXUI-FONDATIONS.md](file:///Users/lycoris/workspace/medev/demo/bloomfield/MODULE-UXUI-FONDATIONS.md) et [PRD-DEMO.md](file:///Users/lycoris/workspace/medev/demo/bloomfield/PRD-DEMO.md).

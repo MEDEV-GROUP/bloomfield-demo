@@ -1,0 +1,63 @@
+# Plan d'implémentation : Fenêtres Flottantes et Modulables
+
+L'objectif est de mettre en place un système de fenêtres autonomes que l'utilisateur peut positionner librement, redimensionner, et qui simulent un environnement de travail de type "Terminal" professionnel.
+
+## Concept technique
+Au lieu d'utiliser une simple grille statique (CSS Grid), l'interface reposera sur un canevas absolu. Les widgets seront wrappés dans des composants rendant possibles le Drag & Drop (déplacement) et le Resizing (redimensionnement).
+
+- **Dépendance suggérée** : `react-rnd` (React Resize and Drag) pour sa légèreté et sa robustesse avec React, idéale pour des composants isolés et modulables. Alternative : `dnd-kit` pour une solution plus bas-niveau, mais `react-rnd` est spécifiquement pensé pour des fenêtres "flottantes".
+- **State Management** : Utilisation de `zustand` (recommandé pour la légèreté) ou du Context React basique pour centraliser l'état des fenêtres :
+  - Liste des widgets actifs.
+  - Position (x, y) et Dimensions (width, height) de chaque widget.
+  - État (minimisé, maximisé, focus/z-index).
+
+## User Review Required
+> [!IMPORTANT]  
+> Nous devons d'abord convenir de la librairie à utiliser.
+> 1. Êtes-vous d'accord pour introduire `react-rnd` et `zustand` (ou préferez-vous que tout soit géré via le state de React classique et `dnd-kit`) ?
+> 2. Pensez-vous aux "plusieurs écrans" comme étant du multi-browsing (nécessitant des API fenêtres natives) ou plutôt un espace de travail virtuel large sur un seul onglet de navigateur ? (Généralement, pour le web, on gère un grand canevas virtuel, ou bien l'approche "multi-écrans" requiert l'ouverture de pop-ups web via `window.open`, ce qui est plus complexe pour la synchronisation de l'état).
+> Pour cette démo, je recommande fortement de se concentrer sur l'espace de bureau au sein d'un seul onglet (un grand "desktop virtuel").
+
+## Proposed Changes
+
+### 1. Configuration & Dépendances
+- Ajouter `react-rnd` pour le drag & resize.
+- Ajouter `zustand` pour la gestion facile de l'état global des fenêtres.
+
+### 2. State Management (Nouveau)
+#### [NEW] `store/window-store.ts`
+- Créer le store zustand gérant le `WindowContext`.
+- Gérer un tableau d'objets `WindowNode` (`{ id, title, type, defaultPos, defaultSize, zIndex, isMinimized, isMaximized }`).
+- Actions : `openWindow`, `closeWindow`, `focusWindow` (met à jour le z-index au clic), `updateWindowPosAndSize`.
+
+### 3. Composants Core Fenêtres
+#### [NEW] `components/floating-window.tsx` (WidgetContainer)
+- Wrappera le contenu dans le composant `<Rnd>` de `react-rnd`.
+- Inclura un Header avec icônes de contrôle (croix de fermeture, bouton réduire/agrandir).
+- Styling du conteneur en utilisant les classes Tailwind et variables CSS (ex: `bg-card border shadow-xl`).
+- Ce composant écoutera le store et se mettra à jour en fonction (et notifiera le store de ses nouveaux déplacements `onDragStop`, `onResizeStop`).
+
+#### [NEW] `components/window-manager.tsx`
+- Se trouve à la racine de la zone de contenu principale.
+- Va lire la liste des fenêtres ouvertes depuis le store et générer dynamiquement les `<FloatingWindow>`.
+- Mappera chaque type de widget défini (ex: `MARKET_OVERVIEW`, `STOCK_CHART`) à son composant métier respectif.
+
+### 4. Mise à jour des Vues
+#### [MODIFY] [app/(app)/page.tsx](file:///Users/lycoris/workspace/medev/demo/bloomfield/app/%28app%29/page.tsx) (Dashboard Marchés)
+- Remplacer le layout en grille par le `WindowManager`.
+- Au montage du composant principal, initialiser le store avec quelques fenêtres par défaut (ex: Indices, Movers) pour simuler l'état d'un dashboard de départ.
+
+#### [MODIFY] `components/sidebar.tsx`
+- Faire en sorte que les clics sur les liens du sidebar déclenchent l'action `openWindow(...)` au lieu de naviguer vers de nouvelles pages (pour privilégier le multi-fenêtrage tel qu'attendu).
+
+## Verification Plan
+
+### Automated Tests
+- Commandes manuelles du pipeline : `pnpm exec tsc --noEmit`, `pnpm lint`, `pnpm build` après implémentation.
+
+### Manual Verification
+- Ouvrir le dashboard, vérifier que les widgets d'accueil s'affichent correctement.
+- Cliquer et déplacer physiquement les fenêtres sur l'écran.
+- Ajuster les tailles via les bordures et vérifier la fluidité.
+- S'assurer que lorsqu'on clique sur une fenêtre en arrière-plan, elle passe au premier plan.
+- Cliquer sur le menu pour voir s'il lance bien un nouveau composant flottant.

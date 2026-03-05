@@ -6,9 +6,9 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react"
 import Joyride, {
   ACTIONS,
@@ -37,9 +37,11 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
   const [run, setRun] = useState(false)
   const [stepIndex, setStepIndex] = useState(0)
   const navigatingRef = useRef(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => { setMounted(true) }, [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
 
   const startTour = useCallback(() => {
     const firstPage = tourSteps[0]?.page ?? "/"
@@ -49,10 +51,12 @@ export function TourProvider({ children }: { children: React.ReactNode }) {
       // Wait for navigation then start
       setTimeout(() => {
         navigatingRef.current = false
+        window.dispatchEvent(new CustomEvent("bloomfield:tour:start"))
         setStepIndex(0)
         setRun(true)
       }, 600)
     } else {
+      window.dispatchEvent(new CustomEvent("bloomfield:tour:start"))
       setStepIndex(0)
       setRun(true)
     }

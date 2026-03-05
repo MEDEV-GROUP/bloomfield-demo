@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useMemo, useState } from "react"
 import { news, type NewsItem } from "@/data/news"
 import { stocks } from "@/data/stocks"
 import { WidgetContainer } from "@/components/widget-container"
@@ -27,31 +27,24 @@ import {
 /** Toutes les catégories extraites dynamiquement des données */
 const ALL_CATEGORIES = "Toutes"
 
-/** Mapping catégorie -> couleur de badge pour cohérence visuelle */
-const CATEGORY_COLORS: Record<string, string> = {
-  Résultats: "text-green-400 bg-green-500/10 border-green-500/20",
-  "Politique monétaire": "text-blue-400 bg-blue-500/10 border-blue-500/20",
-  Corporate: "text-purple-400 bg-purple-500/10 border-purple-500/20",
-  Marchés: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
-  Macro: "text-orange-400 bg-orange-500/10 border-orange-500/20",
-  Notation: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
-  Obligations: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  Résultats: TrendingUp,
+  "Politique monétaire": BarChart3,
+  Corporate: Tag,
+  Marchés: Newspaper,
+  Macro: Clock,
+  Notation: Hash,
+  Obligations: BarChart3,
 }
 
-/** Couleur de fallback pour les catégories non mappées */
-const DEFAULT_CATEGORY_COLOR =
-  "text-muted-foreground bg-muted/50 border-border"
-
-/** Badge de catégorie coloré selon le mapping CATEGORY_COLORS */
+/** Badge de catégorie avec style tokenisé + icône */
 function CategoryBadge({ category }: { category: string }) {
-  const colorClass = CATEGORY_COLORS[category] ?? DEFAULT_CATEGORY_COLOR
+  const Icon = CATEGORY_ICONS[category] ?? Tag
   return (
     <span
-      className={cn(
-        "inline-flex items-center rounded border px-1.5 py-0.5 text-[10px] font-medium",
-        colorClass
-      )}
+      className="inline-flex items-center gap-1 rounded border border-border bg-accent/50 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
     >
+      <Icon className="size-2.5" />
       {category}
     </span>
   )
@@ -105,6 +98,8 @@ function NewsDetailPanel({ item, onClose }: NewsDetailPanelProps) {
           variant="ghost"
           size="icon-sm"
           onClick={onClose}
+          aria-label="Fermer le détail de l'article"
+          title="Fermer"
           className="shrink-0 text-muted-foreground hover:text-foreground"
         >
           <X className="size-4" />
@@ -236,82 +231,71 @@ function NewsDetailPanel({ item, onClose }: NewsDetailPanelProps) {
 interface NewsListItemProps {
   item: NewsItem
   isSelected: boolean
-  onClick: () => void
+  onSelect: () => void
 }
 
-function NewsListItem({ item, isSelected, onClick }: NewsListItemProps) {
+function NewsListItem({ item, isSelected, onSelect }: NewsListItemProps) {
   return (
-    <button
-      onClick={onClick}
+    <article
       className={cn(
-        "w-full rounded-md border px-3 py-2.5 text-left transition-colors",
+        "w-full rounded-md border p-2 transition-colors",
         isSelected
           ? "border-primary/40 bg-primary/5"
           : "border-transparent hover:border-border hover:bg-accent/40"
       )}
     >
-      <div className="flex items-start gap-2.5">
-        {/* Indicateur coloré catégorie */}
-        <div
-          className={cn(
-            "mt-1.5 size-1.5 shrink-0 rounded-full",
-            // Couleur du point basée sur la catégorie
-            item.category === "Résultats" && "bg-green-500",
-            item.category === "Politique monétaire" && "bg-blue-500",
-            item.category === "Corporate" && "bg-purple-500",
-            item.category === "Marchés" && "bg-yellow-500",
-            item.category === "Macro" && "bg-orange-500",
-            item.category === "Notation" && "bg-cyan-500",
-            item.category === "Obligations" && "bg-indigo-500",
-            !Object.keys(CATEGORY_COLORS).includes(item.category) && "bg-muted-foreground"
-          )}
-        />
-        <div className="min-w-0 flex-1">
-          <p
-            className={cn(
-              "text-xs font-medium leading-snug",
-              isSelected ? "text-foreground" : "text-foreground/90"
-            )}
-          >
-            {item.title}
-          </p>
-          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+      <div className="flex items-start gap-2">
+        <button
+          type="button"
+          onClick={onSelect}
+          className="group flex min-w-0 flex-1 items-start gap-2.5 rounded-sm text-left"
+          aria-pressed={isSelected}
+        >
+          <div className="min-w-0 flex-1">
             <CategoryBadge category={item.category} />
-            {item.relatedTicker && (
-              <span className="font-mono text-[10px] font-semibold text-muted-foreground">
-                {item.relatedTicker}
+            <p
+              className={cn(
+                "mt-1.5 text-xs font-medium leading-snug",
+                isSelected ? "text-foreground" : "text-foreground/90"
+              )}
+            >
+              {item.title}
+            </p>
+            <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+              {item.relatedTicker && (
+                <span className="font-mono text-[10px] font-semibold text-muted-foreground">
+                  {item.relatedTicker}
+                </span>
+              )}
+              <span className="text-[10px] text-muted-foreground">{item.source}</span>
+              <span className="text-[10px] text-muted-foreground">&middot;</span>
+              <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
+                <Clock className="size-2.5" />
+                {item.timestamp}
               </span>
-            )}
-            {item.sourceUrl ? (
-              <a
-                href={item.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-[10px] text-muted-foreground hover:text-foreground hover:underline"
-              >
-                {item.source}
-              </a>
-            ) : (
-              <span className="text-[10px] text-muted-foreground">
-                {item.source}
-              </span>
-            )}
-            <span className="text-[10px] text-muted-foreground">&middot;</span>
-            <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
-              <Clock className="size-2.5" />
-              {item.timestamp}
-            </span>
+            </div>
           </div>
-        </div>
-        <ChevronRight
-          className={cn(
-            "mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-opacity",
-            isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          )}
-        />
+          <ChevronRight
+            className={cn(
+              "mt-0.5 size-3.5 shrink-0 text-muted-foreground transition-opacity",
+              isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            )}
+          />
+        </button>
+        {item.sourceUrl && (
+          <a
+            href={item.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-0.5 inline-flex shrink-0 items-center rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            aria-label={`Ouvrir la source ${item.source} dans un nouvel onglet`}
+            title={`Source: ${item.source}`}
+          >
+            <ExternalLink className="size-3.5" />
+          </a>
+        )}
       </div>
-    </button>
+    </article>
   )
 }
 
@@ -334,6 +318,17 @@ export default function NewsPage() {
     if (activeCategory === ALL_CATEGORIES) return news
     return news.filter((n) => n.category === activeCategory)
   }, [activeCategory])
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category)
+    if (
+      selectedItem &&
+      category !== ALL_CATEGORIES &&
+      selectedItem.category !== category
+    ) {
+      setSelectedItem(null)
+    }
+  }
 
   // --- Stats pour le panneau latéral ---
 
@@ -393,10 +388,13 @@ export default function NewsPage() {
         <div className="flex items-center gap-1">
           {categories.map((cat) => (
             <button
+              type="button"
               key={cat}
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => handleCategoryChange(cat)}
+              aria-pressed={activeCategory === cat}
+              disabled={activeCategory === cat}
               className={cn(
-                "rounded px-2.5 py-1 text-[11px] font-medium transition-colors",
+                "rounded px-2.5 py-1 text-[11px] font-medium transition-colors disabled:cursor-default",
                 activeCategory === cat
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -405,6 +403,17 @@ export default function NewsPage() {
               {cat}
             </button>
           ))}
+          {activeCategory !== ALL_CATEGORIES && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-[11px] text-muted-foreground"
+              onClick={() => handleCategoryChange(ALL_CATEGORIES)}
+            >
+              Réinitialiser
+            </Button>
+          )}
         </div>
       </div>
 
@@ -430,7 +439,7 @@ export default function NewsPage() {
                     key={item.id}
                     item={item}
                     isSelected={selectedItem?.id === item.id}
-                    onClick={() =>
+                    onSelect={() =>
                       setSelectedItem(
                         selectedItem?.id === item.id ? null : item
                       )
@@ -459,8 +468,10 @@ export default function NewsPage() {
                   <div className="space-y-2">
                     {categoryStats.map(({ category, count }) => (
                       <button
+                        type="button"
                         key={category}
-                        onClick={() => setActiveCategory(category)}
+                        onClick={() => handleCategoryChange(category)}
+                        aria-pressed={activeCategory === category}
                         className="flex w-full items-center justify-between rounded px-1 py-0.5 transition-colors hover:bg-accent/50"
                       >
                         <div className="flex items-center gap-2">
