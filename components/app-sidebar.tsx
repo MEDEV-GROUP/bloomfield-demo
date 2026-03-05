@@ -50,6 +50,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 interface NavItem {
   title: string
@@ -182,6 +183,13 @@ function NavItemRenderer({ item, pathname }: { item: NavItem; pathname: string }
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = () => {
+    // Supprime le cookie de session démo
+    document.cookie = "bloomfield_demo_auth=; path=/; max-age=0"
+    router.push("/login")
+  }
 
   return (
     <Sidebar collapsible="icon" data-tour="sidebar">
@@ -270,7 +278,11 @@ export function AppSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Déconnexion">
+            <SidebarMenuButton
+              tooltip="Déconnexion"
+              onClick={handleLogout}
+              className="text-red-400 hover:bg-red-500/10 hover:text-red-400"
+            >
               <LogOut />
               <span>Déconnexion</span>
             </SidebarMenuButton>
