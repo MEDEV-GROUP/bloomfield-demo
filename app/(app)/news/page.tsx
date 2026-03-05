@@ -376,7 +376,10 @@ export default function NewsPage() {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+      <div
+        className="flex items-center justify-between border-b border-border px-4 py-2.5"
+        data-tour="news-header"
+      >
         <div className="flex items-center gap-2.5">
           <Newspaper className="size-4 text-muted-foreground" />
           <h1 className="text-sm font-semibold">Actualités</h1>
@@ -385,7 +388,7 @@ export default function NewsPage() {
           </Badge>
         </div>
         {/* Filtres catégorie */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" data-tour="news-filters">
           {categories.map((cat) => (
             <button
               type="button"
@@ -425,6 +428,7 @@ export default function NewsPage() {
             "flex flex-col border-r border-border transition-all",
             selectedItem ? "w-[calc(100%-320px)]" : "w-full"
           )}
+          data-tour="news-list"
         >
           <ScrollArea className="flex-1">
             <div className="space-y-1 p-4">
@@ -452,7 +456,7 @@ export default function NewsPage() {
         </div>
 
         {/* Panneau droit : soit détail article, soit sidebar contextuelle */}
-        <div className="flex w-80 shrink-0 flex-col overflow-hidden">
+        <div className="flex w-80 shrink-0 flex-col overflow-hidden" data-tour="news-sidebar">
           {selectedItem ? (
             // Détail de l'article sélectionné
             <NewsDetailPanel

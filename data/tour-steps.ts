@@ -113,6 +113,41 @@ export const tourSteps: TourStep[] = [
     disableBeacon: true,
     placement: "top",
   },
+  // News Steps
+  {
+    target: '[data-tour="news-header"]',
+    title: "Flux Actualités",
+    content:
+      "Retrouvez ici la veille financière et macro, consolidée depuis les principales sources.",
+    page: "/news",
+    disableBeacon: true,
+  },
+  {
+    target: '[data-tour="news-filters"]',
+    title: "Filtres par catégorie",
+    content:
+      "Filtrez rapidement le flux par thème (marchés, macro, corporate, etc.).",
+    page: "/news",
+    disableBeacon: true,
+  },
+  {
+    target: '[data-tour="news-list"]',
+    title: "Liste des articles",
+    content:
+      "Parcourez les titres, sélectionnez un article et ouvrez la source externe si nécessaire.",
+    page: "/news",
+    disableBeacon: true,
+    placement: "right",
+  },
+  {
+    target: '[data-tour="news-sidebar"]',
+    title: "Contexte et tendances",
+    content:
+      "Le panneau droit affiche la répartition par catégorie, les tickers les plus cités et les sources actives.",
+    page: "/news",
+    disableBeacon: true,
+    placement: "left",
+  },
   // Fiche Valeur Steps (Demonstrated with SNTS)
   {
     target: '[data-tour="ticker-header"]',

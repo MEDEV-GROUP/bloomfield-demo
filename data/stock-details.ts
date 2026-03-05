@@ -192,15 +192,17 @@ export function generateOrderBook(currentPrice: number): OrderBook {
   const bids: OrderBook["bids"] = []
   const asks: OrderBook["asks"] = []
   const step = Math.max(5, Math.round(currentPrice * 0.0003))
+  const seed = Math.max(1, Math.round(currentPrice) * 97 + step * 13)
+  const rand = seededRandom(seed)
 
   for (let i = 0; i < 5; i++) {
     bids.push({
       price: currentPrice - step * i,
-      quantity: Math.round(100 + Math.random() * 800),
+      quantity: Math.round(100 + rand() * 800),
     })
     asks.push({
       price: currentPrice + step * (i + 1),
-      quantity: Math.round(100 + Math.random() * 800),
+      quantity: Math.round(100 + rand() * 800),
     })
   }
 

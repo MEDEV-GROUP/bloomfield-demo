@@ -12,6 +12,7 @@ const availablePages = [
   { label: "Fiche Valeur (ex: SNTS)", href: "/marches/SNTS", description: "Graphique chandeliers, fondamentaux, score Tigran" },
   { label: "Portefeuille", href: "/portefeuille", description: "KPIs, allocation sectorielle, performance, positions" },
   { label: "Données Macroéconomiques", href: "/macro", description: "Carte UEMOA, indicateurs clés, prévisions Bloomfield" },
+  { label: "Actualités", href: "/news", description: "Flux d'articles, filtres par catégorie et panneau de détail" },
   { label: "Login", href: "/login", description: "Authentification à double facteur" },
 ]
 
